@@ -1,5 +1,11 @@
 package interfaces
 
+import (
+	"io"
+)
+
 type Service interface {
-	Boot()
+	Upload(filename string, file io.Reader) (string, error)
+	List() (string, error)
+	Get(id string) (string, error)
 }
