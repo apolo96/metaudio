@@ -12,4 +12,5 @@ func help(cmds []interfaces.Command) {
 	for _, c := range cmds {
 		fmt.Printf("%s (%s) \n", c.Name(), c.Description())
 	}
+	fmt.Println("")
 }

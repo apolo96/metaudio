@@ -13,6 +13,8 @@ func main() {
 	client := &http.Client{}
 	cmds := []interfaces.Command{
 		commands.NewGetCommand(client),
+		commands.NewListCommand(client),
+		commands.NewUploadCommand(client),
 	}
 	parser := helpers.NewParser(cmds)
 	if err := parser.Parse(os.Args[1:]); err != nil {

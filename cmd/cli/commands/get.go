@@ -1,9 +1,14 @@
 package commands
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
 
+	"github.com/apolo96/metaudio/cmd/cli/config"
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
 
@@ -32,8 +37,26 @@ func (cmd *GetCommand) ParseFlags(flags []string) error {
 	return cmd.flag.Parse(flags)
 }
 
-func (cmd *GetCommand) Run() error {
-	fmt.Println("Getting a Audio Metadata")
+func (cmd *GetCommand) Run() error {	
+	url := strings.Replace(config.API_GET_URL, "{id}", cmd.id, 1)
+	req, err := http.NewRequest(http.MethodGet, url, &bytes.Buffer{})
+	if err != nil {
+		return err
+	}
+	res, err := cmd.client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+	bs := string(b)
+	if bs == ""{
+		fmt.Println("Resource not found, please verify the ID field")
+	}
+	fmt.Print(bs)
 	return nil
 }
 
