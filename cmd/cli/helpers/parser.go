@@ -29,5 +29,5 @@ func (p *Parser) Parse(args []string) error  {
 		}
 	}
 	defer help(p.commands)
-	return fmt.Errorf("unknown subcommand: %s", subcommand)
+	return fmt.Errorf("error unknown subcommand: %s", subcommand)
 }
