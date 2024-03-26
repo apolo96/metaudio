@@ -30,12 +30,10 @@ func Extract(m *models.Audio) error {
 	req, _ := http.NewRequest("POST", UPLOAD_URL, bytes.NewBuffer(data))
 	req.Header.Set("authorization", apiKey)
 	res, err := client.Do(req)
-	defer res.Body.Close()
-
 	if err != nil {
 		log.Fatalln(err)
 	}
-
+	defer res.Body.Close()
 	// Decode json and store it in a map
 	var result map[string]interface{}
 	json.NewDecoder(res.Body).Decode(&result)
@@ -98,7 +96,6 @@ func Extract(m *models.Audio) error {
 			fmt.Println("m.Metadata.Transcript: ", m.Metadata.Transcript)
 
 			break
-		} else {
 		}
 	}
 
