@@ -15,6 +15,7 @@ func main() {
 		commands.NewGetCommand(client),
 		commands.NewListCommand(client),
 		commands.NewUploadCommand(client),
+		commands.NewDeleteCommand(client),
 	}
 	parser := helpers.NewParser(cmds)
 	if err := parser.Parse(os.Args[1:]); err != nil {

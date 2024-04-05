@@ -107,6 +107,13 @@ func (f FlatFile) List() ([]*models.Audio, error) {
 }
 
 func (f FlatFile) Delete(id string) error {
-	fmt.Println("Deleting")
+	dirname, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+	filePath := filepath.Join(dirname, "audiofile", id)
+	if err := os.RemoveAll(filePath); err != nil {
+		return err
+	}
 	return nil
 }

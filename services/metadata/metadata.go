@@ -128,3 +128,11 @@ func (ms *MetadataService) Get(id string) (audioJson string, err error) {
 	}
 	return audioJson, err
 }
+
+func (ms *MetadataService) Delete(id string) error {
+	err := ms.Storage.Delete(id)
+	if err != nil {		
+		return err
+	}
+	return nil
+}
