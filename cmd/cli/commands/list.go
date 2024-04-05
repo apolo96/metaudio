@@ -29,7 +29,7 @@ func (cmd *ListCommand) ParseFlags(flags []string) error {
 	return cmd.flag.Parse(flags)
 }
 
-func (cmd *ListCommand) Run() error {	
+func (cmd *ListCommand) Run() error {
 	req, err := http.NewRequest(http.MethodGet, config.API_LIST_URL, &bytes.Buffer{})
 	if err != nil {
 		return err
@@ -43,10 +43,6 @@ func (cmd *ListCommand) Run() error {
 	if err != nil {
 		return err
 	}
-	/* bs := string(b)
-	if bs == ""{
-		fmt.Println("Resources not found, please upload an audio file")
-	} */
 	fmt.Print(string(b))
 	return nil
 }

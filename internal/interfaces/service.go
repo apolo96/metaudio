@@ -9,4 +9,5 @@ type Service interface {
 	List() (string, error)
 	Get(id string) (string, error)
 	Delete(id string) error
+	Search(text string) (string, error)
 }

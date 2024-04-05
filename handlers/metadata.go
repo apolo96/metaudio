@@ -23,6 +23,7 @@ func NewMetadataHandler(mux *http.ServeMux) {
 	mux.HandleFunc("GET /request/{id}", metadataHandler.get)
 	mux.HandleFunc("GET /list", metadataHandler.list)
 	mux.HandleFunc("DELETE /audio/{id}", metadataHandler.delete)
+	mux.HandleFunc("GET /search", metadataHandler.search)
 }
 
 func (mh *MetadataHandler) upload(res http.ResponseWriter, req *http.Request) {
@@ -75,4 +76,19 @@ func (mh *MetadataHandler) delete(res http.ResponseWriter, req *http.Request) {
 	}
 	res.WriteHeader(http.StatusOK)
 	io.WriteString(res, fmt.Sprintf("successfully deleted audio with id: %s", id))
+}
+
+func (mh *MetadataHandler) search(res http.ResponseWriter, req *http.Request) {
+	text := req.URL.Query().Get("q")
+	result, err := mh.Service.Search(text)
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			res.WriteHeader(http.StatusNotFound)
+			return
+		}
+		res.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusOK)
+	io.WriteString(res, result)
 }

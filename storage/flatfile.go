@@ -5,8 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/apolo96/metaudio/models"
 
@@ -116,4 +118,33 @@ func (f FlatFile) Delete(id string) error {
 		return err
 	}
 	return nil
+}
+
+func (f FlatFile) Search(text string) ([]*models.Audio, error) {
+	dir, err := os.UserHomeDir()
+	audios := []*models.Audio{}
+	if err != nil {
+		return audios, err
+	}
+	path := filepath.Join(dir, "audiofile")
+	err = filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
+		if d.Name() == "metadata.json" {
+			content, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			if strings.Contains(strings.ToLower(string(content)), strings.ToLower(text)) {
+				audio := models.Audio{}
+				if err = json.Unmarshal(content, &audio); err != nil {
+					return err
+				}
+				audios = append(audios, &audio)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return audios, err
+	}
+	return audios, err
 }

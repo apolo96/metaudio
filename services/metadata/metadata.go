@@ -109,7 +109,7 @@ func (ms *MetadataService) List() (audios string, err error) {
 		return audios, err
 	}
 	var prettyJSON bytes.Buffer
-	err = json.Indent(&prettyJSON, []byte(jsonData), "", "    ")
+	err = json.Indent(&prettyJSON, []byte(jsonData), "", "  ")
 	audios = prettyJSON.String()
 	return audios, err
 }
@@ -131,8 +131,21 @@ func (ms *MetadataService) Get(id string) (audioJson string, err error) {
 
 func (ms *MetadataService) Delete(id string) error {
 	err := ms.Storage.Delete(id)
-	if err != nil {		
+	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (ms *MetadataService) Search(text string) (audios string, err error) {
+	results, err := ms.Storage.Search(text)
+	if err != nil {
+		return audios, err
+	}
+	data, err := json.MarshalIndent(results, "", "  ")
+	if err != nil {
+		return audios, err
+	}
+	audios = string(data)
+	return audios, err
 }
