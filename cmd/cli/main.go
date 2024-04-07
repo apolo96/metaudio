@@ -17,6 +17,7 @@ func main() {
 		commands.NewUploadCommand(client),
 		commands.NewDeleteCommand(client),
 		commands.NewSearchCommand(client),
+		commands.NewPlayCommand(client),
 	}
 	parser := helpers.NewParser(cmds)
 	if err := parser.Parse(os.Args[1:]); err != nil {
