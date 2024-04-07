@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/apolo96/metaudio/cmd/cli/config"
 	"github.com/apolo96/metaudio/internal/interfaces"
+	"github.com/apolo96/metaudio/models"
 )
 
 type ListCommand struct {
@@ -39,11 +41,20 @@ func (cmd *ListCommand) Run() error {
 		return err
 	}
 	defer res.Body.Close()
-	b, err := io.ReadAll(res.Body)
+	data, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
-	fmt.Print(string(b))
+	var audios models.AudioList
+
+	if err := json.Unmarshal(data, &audios); err != nil {
+		return err
+	}
+	result, err := audios.Table()
+	if err != nil {
+		return err
+	}
+	fmt.Print(result)
 	return nil
 }
 

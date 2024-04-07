@@ -8,6 +8,9 @@ import (
 	"runtime"
 
 	"github.com/apolo96/metaudio/cmd/cli/client"
+	"github.com/apolo96/metaudio/models"
+	"github.com/pterm/pterm"
+
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
 
@@ -44,10 +47,11 @@ func (cmd *PlayCommand) Run() error {
 	if result == "" {
 		return fmt.Errorf("resource not found, please verify the ID field")
 	}
-	audio := &client.Audio{}
+	audio := &models.Audio{}
 	if err := json.Unmarshal([]byte(result), &audio); err != nil {
 		return err
 	}
+
 	if err := cmd.play(runtime.GOOS, audio.Path); err != nil {
 		return err
 	}
@@ -55,26 +59,29 @@ func (cmd *PlayCommand) Run() error {
 }
 
 func (cmd *PlayCommand) play(os string, audioPath string) error {
-	var path string
+	var program string
 	switch os {
 	case "darwin":
-		path = "afplay"
+		program = "afplay"
 	case "windows":
-		path = "cmd /C start"
+		program = "cmd /C start"
 	case "linux":
-		path = "aplay"
+		program = "aplay"
 	}
-	if path == "" {
+	if program == "" {
 		return fmt.Errorf("operating system is not support for playing music")
 	}
-	play := exec.Command(path, audioPath)
+	play := exec.Command(program, audioPath)
 	if err := play.Start(); err != nil {
+		fmt.Println("ok")
 		return err
 	}
-	fmt.Println("Enjoy the music!")
+	spinner := &pterm.SpinnerPrinter{}
+	spinner, _ = pterm.DefaultSpinner.Start("Enjoy the music...")
 	if err := play.Wait(); err != nil {
 		return err
 	}
+	spinner.Stop()
 	return nil
 }
 

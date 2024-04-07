@@ -1,12 +1,14 @@
 package commands
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/client"
 	"github.com/apolo96/metaudio/internal/interfaces"
+	"github.com/apolo96/metaudio/models"
 )
 
 type GetCommand struct {
@@ -50,7 +52,11 @@ func (cmd *GetCommand) Run() error {
 	if audio == "" {
 		fmt.Println("Resource not found, please verify the ID field")
 	}
-	fmt.Print(audio)
+	model := models.Audio{}
+	if err := json.Unmarshal([]byte(audio), &model); err != nil {
+		return err
+	}
+	fmt.Print(model.Table())
 	return nil
 }
 
