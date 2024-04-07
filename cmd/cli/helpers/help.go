@@ -10,7 +10,7 @@ func help(cmds []interfaces.Command) {
 	fmt.Printf("usage: metaudio <command> [<flags>] \n \n")
 	fmt.Printf("These are a few Audiofile commands: \n \n")
 	for _, c := range cmds {
-		fmt.Printf("%s (%s) \n", c.Name(), c.Description())
+		fmt.Printf("  %s (%s) \n", c.Name(), c.Description())
 	}
 	fmt.Println("")
 }
