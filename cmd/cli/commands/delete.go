@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/config"
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
@@ -38,6 +39,14 @@ func (cmd *DeleteCommand) ParseFlags(flags []string) error {
 }
 
 func (cmd *DeleteCommand) Run() error {
+	var confirmed bool
+	prompt := &survey.Confirm{
+		Message: "you'd like to delete audiofile with id " + cmd.id,
+	}
+	survey.AskOne(prompt, &confirmed)
+	if !confirmed {
+		return fmt.Errorf("the delete operation was canceled")
+	}
 	url := strings.Replace(config.API_DELETE_URL, "{id}", cmd.id, 1)
 	req, err := http.NewRequest(http.MethodDelete, url, &bytes.Buffer{})
 	if err != nil {

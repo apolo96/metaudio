@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/config"
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
@@ -33,8 +34,21 @@ func NewUploadCommand(client interfaces.Client) *UploadCommand {
 
 func (cmd *UploadCommand) ParseFlags(flags []string) error {
 	if len(flags) == 0 {
-		fmt.Println("usage: metaudio upload -filename <filename>")
-		return fmt.Errorf("missing flags")
+		var filename string
+		prompt := &survey.Input{
+			Message: "What is the filename of the audio to upload",
+			Suggest: func(toComplete string) []string {
+				files, _ := filepath.Glob(toComplete + "*")
+				return files
+			},
+		}
+		survey.AskOne(prompt, &filename)
+		if filename == "" {
+			fmt.Println("usage: metaudio upload -filename <filename>")
+			return fmt.Errorf("missing flags")
+		}
+		flags = append(flags, "-filename", filename)
+
 	}
 	return cmd.flag.Parse(flags)
 }

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/client"
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
@@ -27,8 +28,16 @@ func NewGetCommand(client interfaces.Client) *GetCommand {
 
 func (cmd *GetCommand) ParseFlags(flags []string) error {
 	if len(flags) == 0 {
-		fmt.Println("usage: metaudio get -id <id>")
-		return fmt.Errorf("missing flags")
+		var id string
+		prompt := &survey.Input{
+			Message: "What is the id of the audio-file?",
+		}
+		survey.AskOne(prompt, &id)
+		if id == "" {
+			fmt.Println("usage: metaudio get -id <id>")
+			return fmt.Errorf("missing flags")
+		}
+		flags = append(flags, "-id", id)
 	}
 	return cmd.flag.Parse(flags)
 }
