@@ -12,6 +12,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/config"
+	"github.com/apolo96/metaudio/cmd/cli/format"
 	"github.com/apolo96/metaudio/internal/interfaces"
 )
 
@@ -86,8 +87,8 @@ func (cmd *UploadCommand) Run() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Audiofile ID: ", string(b))
-
+	fmt.Println(format.EmojiCheck, " Successfully uploaded!")
+	fmt.Println(format.EmojiCheck, " Audiofile ID: ", string(b))
 	return nil
 }
 
