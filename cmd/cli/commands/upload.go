@@ -9,11 +9,13 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/apolo96/metaudio/cmd/cli/config"
 	"github.com/apolo96/metaudio/cmd/cli/format"
 	"github.com/apolo96/metaudio/internal/interfaces"
+	"github.com/pterm/pterm"
 )
 
 type UploadCommand struct {
@@ -55,7 +57,12 @@ func (cmd *UploadCommand) ParseFlags(flags []string) error {
 }
 
 func (cmd *UploadCommand) Run() error {
-	fmt.Println("Uploading audio file...")
+	/* Progress Bar */
+	var progress = &pterm.ProgressbarPrinter{}
+	progress, _ = pterm.DefaultProgressbar.WithTotal(2).WithTitle("Initiating upload...").Start()
+	time.Sleep(time.Second)
+	/* End Progress Bard */
+
 	body := &bytes.Buffer{}
 	multiWriter := multipart.NewWriter(body)
 	file, err := os.Open(cmd.filename)
@@ -78,15 +85,37 @@ func (cmd *UploadCommand) Run() error {
 		return err
 	}
 	req.Header.Set("Content-Type", multiWriter.FormDataContentType())
+
+	/* Progress Bar */
+	progress.UpdateTitle("Sending request...")
+	time.Sleep(4 * time.Second)
+	/* End Progress Bar */
+
 	res, err := cmd.client.Do(req)
 	if err != nil {
 		return err
 	}
+	/* Progress Bar */
+	pterm.Success.Println("Sending request...")
+	progress.Increment()
+	/* End Progress Bard */
+
 	defer res.Body.Close()
+
+	/* Progress Bar  */
+	progress.UpdateTitle("Process response...")
+	time.Sleep(2 * time.Second)
+	/* End Progress Bard */
+
 	b, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
+	/* Progress Bar  */
+	pterm.Success.Println("Process response...")
+	progress.Increment()
+	/* End Progress Bard */
+
 	fmt.Println(format.EmojiCheck, " Successfully uploaded!")
 	fmt.Println(format.EmojiCheck, " Audiofile ID: ", string(b))
 	return nil
