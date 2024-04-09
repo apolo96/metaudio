@@ -27,8 +27,16 @@ go test ./cmd/cli/helpers -v
 
 ### Build CLI Program.
 
+Build a Free version binary
+
 ```bash
-go build -o metaudio cmd/cli/main.go
+go build -o metaudio ./cmd/cli 
+```
+
+Build a Pro version binary
+
+```bash
+go build -tags pro -o metaudio ./cmd/cli
 ```
 
 ## Usage CLI
