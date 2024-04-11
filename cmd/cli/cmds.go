@@ -9,13 +9,14 @@ import (
 
 var isProPlan bool
 
-func bundle() []interfaces.Command {
+func loadCommands() []interfaces.Command {
 	client := &http.Client{}
 	cmds := []interfaces.Command{
 		commands.NewGetCommand(client),
 		commands.NewListCommand(client),
 		commands.NewUploadCommand(client),
 		commands.NewDeleteCommand(client),
+		commands.NewBugCommand(client),
 	}
 	if isProPlan {
 		cmds = append(

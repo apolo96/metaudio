@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	cmds := bundle()
+	cmds := loadCommands()
 	parser := helpers.NewParser(cmds)
 	if err := parser.Parse(os.Args[1:]); err != nil {
 		os.Stderr.WriteString(err.Error() + "\n")
