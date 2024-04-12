@@ -102,6 +102,7 @@ func (ms *MetadataService) extract(audio *models.Audio) {
 func (ms *MetadataService) List() (audios string, err error) {
 	audioFiles, err := ms.Storage.List()
 	if err != nil {
+		println(err.Error())
 		return audios, err
 	}
 	jsonData, err := json.Marshal(audioFiles)

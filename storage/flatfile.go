@@ -84,27 +84,39 @@ func (f FlatFile) Upload(bytes []byte, filename string) (string, string, error) 
 
 func (f FlatFile) List() ([]*models.Audio, error) {
 	dirname, err := os.UserHomeDir()
+	println("Storage: listing audios in: " + dirname)
 	if err != nil {
 		return nil, err
 	}
 	metadataFilePath := filepath.Join(dirname, "audiofile")
+	println("Storage: prepare dir files path: " + metadataFilePath)
 	if _, err := os.Stat(metadataFilePath); errors.Is(err, os.ErrNotExist) {
-		_ = os.Mkdir(metadataFilePath, os.ModePerm)
+		println("Storage: dir not exits, creating path: " + metadataFilePath)
+		if err = os.Mkdir(metadataFilePath, os.ModePerm); err != nil {
+			println("Storage: error creating path" + err.Error())
+			return nil, err
+		}
 	}
+	println("Storage: reading files")
 	files, err := os.ReadDir(metadataFilePath)
 	if err != nil {
+		println(err.Error())
 		return nil, err
 	}
+	println("Storage: each files audios")
 	audioFiles := []*models.Audio{}
 	for _, file := range files {
 		if file.IsDir() {
-			name, err := f.GetByID(file.Name())
+			println("Storage: getting file " + file.Name())
+			audio, err := f.GetByID(file.Name())
 			if err != nil {
 				return nil, err
 			}
-			audioFiles = append(audioFiles, name)
+			audioFiles = append(audioFiles, audio)
+			println("Storage: prepare audio in list " + audio.Id)
 		}
 	}
+	print("Storage audios length ", len(audioFiles))
 	return audioFiles, nil
 }
 

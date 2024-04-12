@@ -47,6 +47,7 @@ func (mh *MetadataHandler) upload(res http.ResponseWriter, req *http.Request) {
 func (mh *MetadataHandler) list(res http.ResponseWriter, req *http.Request) {
 	audios, err := mh.Service.List()
 	if err != nil {
+		println(err.Error())
 		res.WriteHeader(http.StatusInternalServerError)
 		return
 	}
