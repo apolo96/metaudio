@@ -1,6 +1,11 @@
 # Metaudio CLI & API
 
-Metaudio extract the metadata from audio file.
+Metaudio extracts the metadata from the audio file.
+
+## How to Install CLI using Homebrew
+
+[Click here to go for Install Guide](https://github.com/apolo96/homebrew-metaudio)
+
 
 ## Starting for Developers
 
