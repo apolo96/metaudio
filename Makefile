@@ -13,19 +13,19 @@ build-all-linux: build-linux-amd64-free build-linux-amd64-pro
 
 build-darwin-arm64-free:
 	GOOS=darwin GOARCH=arm64 go build -tags darwin -o bin/free/darwin/arm/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x bin/free/darwin/arm/metaudio
 
 build-darwin-arm64-pro:
 	GOOS=darwin GOARCH=arm64 go build -tags "darwin pro" -o bin/pro/darwin/arm/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x bin/pro/darwin/arm/metaudio
 
 build-darwin-amd64-free:
 	GOOS=darwin GOARCH=amd64 go build -tags darwin -o bin/free/darwin/amd/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x bin/free/darwin/amd/metaudio
 
 build-darwin-amd64-pro:
 	GOOS=darwin GOARCH=amd64 go build -tags "darwin pro" -o bin/pro/darwin/amd/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x bin/pro/darwin/amd/metaudio
 
 build-windows-amd64-free:
 	GOOS=windows GOARCH=amd64 go build -tags windows -o bin/free/windows/amd/metaudio.exe ./cmd/cli
@@ -35,11 +35,11 @@ build-windows-amd64-pro:
 
 build-linux-amd64-free:
 	GOOS=linux GOARCH=amd64 go build -tags linux -o bin/free/linux/amd/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x bin/free/linux/amd/metaudio
 
 build-linux-amd64-pro:
 	GOOS=linux GOARCH=amd64 go build -tags "linux pro" -o bin/pro/linux/amd/metaudio ./cmd/cli
-	chmod +x bin/metaudio
+	chmod +x in/pro/linux/amd/metaudio
 
 install-darwin-free: 
 	go install -tags "darwin" github.com/apolo96/metaudio/cmd/cli/cmd/cli
