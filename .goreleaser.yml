@@ -3,6 +3,7 @@ before:
     - go mod tidy
 
 builds:
+  - main: ./cmd/cli
   - env:
     - CGO_ENABLE=0
     goos:
